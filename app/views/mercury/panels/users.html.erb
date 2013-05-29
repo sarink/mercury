@@ -1,0 +1,110 @@
+<div class="mercury-manageUsers-panel">
+    <div class="tabbable">
+        <!-- nav for tabs -->
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#manageusers" data-toggle="tab">
+                    <i class="icon-cog"></i>
+                    Manage Users
+                </a>
+            </li>
+            <li>
+                <a href="#adduser" data-toggle="tab">
+                    <i class="icon-plus-sign"></i>
+                    Add User
+                </a>
+            </li>
+        </ul>
+        
+        <!-- the tabs -->
+        <div class="tab-content">
+            <div class="tab-pane active" id="manageusers">
+                <div class="filter">
+                  <input class="filter focusable" type="text">
+                </div>
+                <div class="users-container">
+                    <% User.all.each do |user| %>
+                        <div class="user" data-filter="<%= user.username %> <%= user.email %> <%= user.admin? ? 'admin' : ''%>">
+                            <hr style="clear:both; margin:10px 0;"/>
+                            <table class="info">
+                                <tr>
+                                    <td class="username">Username:</td>
+                                    <td><%= user.username %></td>
+                                </tr>
+                                <tr>
+                                    <td class="email">Email:</td>
+                                    <td><%= user.email %></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="badge badge-info"><%= user.admin? ? 'admin' : ''%></span>
+                                    </td>
+                                    <td>
+    
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="controls">
+                                <button class="deleteuser btn btn-mini btn-danger">
+                                    <i class="icon-remove icon-white"></i>
+                                </button>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+            
+            <div class="tab-pane" id="adduser">
+                <form class="form-horizontal" accept-charset="UTF-8" action="/users" class="new_user" id="new_user" method="post">
+                    <input name="utf8" type="hidden" value="✓">
+                    <!-- Text input-->
+                    <div class="control-group">
+                      <label class="control-label" for="user_username">Username</label>
+                      <div class="controls">
+                        <input id="user_username" name="user[username]" type="text" placeholder="" class="input-large" required="">
+                      </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="control-group">
+                      <label class="control-label" for="user_email">Email</label>
+                      <div class="controls">
+                        <input id="user_email" name="user[email]" type="text" placeholder="" class="input-large" required="">
+                      </div>
+                    </div>
+                    <!-- Password input-->
+                    <div class="control-group">
+                      <label class="control-label" for="user_password">Password</label>
+                      <div class="controls">
+                        <input id="user_password" name="user[password]" type="password" placeholder="" class="input-large" required="">
+                      </div>
+                    </div>
+                    <!-- Password input-->
+                    <div class="control-group">
+                      <label class="control-label" for="user_password_confirmation"></label>
+                      <div class="controls">
+                        <input id="user_password_confirmation" name="user[password_confirmation]" type="password" placeholder="" class="input-large" required="">
+                      </div>
+                    </div>
+                    <!-- Multiple Checkboxes -->
+                    <input type="hidden" name="user[admin]" id="user_admin" value="1">
+                    <!-- <div class="control-group">
+                      <label class="control-label" for="roles">Roles</label>
+                      <div class="controls">
+                        <label class="checkbox" for="user_admin">
+                          <input type="checkbox" name="user[admin]" id="user_admin" value="1">
+                          admin
+                        </label>
+                      </div>
+                    </div> -->
+                    <!-- Button -->
+                    <div class="control-group">
+                      <label class="control-label" for="submit_button"></label>
+                      <div class="controls">
+                        <button id="submit_button" name="submit_button" class="btn btn-primary">Submit</button>
+                      </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

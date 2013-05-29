@@ -1,0 +1,43 @@
+<%= form_for 'options', {url: '', html: {class: 'form-horizontal', style: 'width:615px'}} do |f| %>
+
+  <div class="form-inputs mercury-display-pane-container">
+
+    <fieldset style="display:none;">
+      <div class="control-group string required">
+        <label class="string required control-label">Image source</label>
+        <div class="controls">
+          <input class="span6 string required" name="options[src]" size="50" type="text" value="<%= @options["src"] %>">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Options</legend>
+      <div class="control-group string optional">
+        <label class="string optional control-label">Width (px) </label>
+        <div class="controls">
+          <input class="span2 string optional" name="options[width]" size="50" type="text" value="<%= @options["width"] %>" placeholder="auto">
+        </div>
+      </div>
+      <div class="control-group string optional">
+        <label class="string optional control-label">Height (px) </label>
+        <div class="controls">
+          <input class="span2 string optional" name="options[height]" size="50" type="text" value="<%= @options["height"] %>" placeholder="auto">
+        </div>
+      </div>
+      
+      <div class="control-group string optional">
+        <label class="string optional control-label">Title </label>
+        <div class="controls">
+          <input class="span5 string optional" name="options[title]" size="50" type="text" value="<%= @options["title"] %>">
+        </div>
+      </div>
+    </fieldset>
+
+  </div>
+
+  <div class="form-actions mercury-display-controls">
+    <input class="btn btn-primary" name="commit" type="submit" value="Insert Snippet"/>
+  </div>
+
+<% end %>

@@ -48,11 +48,8 @@ class @Mercury.Region
       @element.html(value)
     else
       # sanitize the html before we return it
-      # create the element without jQuery since $el.html() executes <script> tags
-      container = document.createElement('div')
-      container.innerHTML = @element.html().replace(/^\s+|\s+$/g, '')
-      container = $(container)
-
+      container = jQuery('<div>').appendTo(@document.createDocumentFragment())
+      container.html(@element.html().replace(/^\s+|\s+$/g, ''))
       # replace snippet contents to be an identifier
       if filterSnippets then for snippet in container.find('[data-snippet]')
         snippet = jQuery(snippet)
@@ -86,24 +83,26 @@ class @Mercury.Region
 
 
   snippets: ->
-    snippets = {}
+    snippets = []
     for element in @element.find('[data-snippet]')
       snippet = Mercury.Snippet.find(jQuery(element).data('snippet'))
       continue unless snippet
-      snippets[snippet.identity] = snippet.serialize()
+      snippets.push(snippet.serialize())
     return snippets
 
 
-  dataAttributes: ->
-    data = {}
-    data[attr] = (@container || @element).attr('data-' + attr) for attr in Mercury.config.regions.dataAttributes
-    return data
+  saveAttributes: ->
+    attrs = {}
+    attrs[attr] = (@container || @element).attr(attr) for attr in Mercury.config.regions.saveAttributes
+    return attrs
 
 
   serialize: ->
-    return {
-      type: @type()
-      data: @dataAttributes()
-      value: @content(null, true)
+    obj = {
+      region_name: @name
+      region_type: @type()
+      attrs: @saveAttributes()
       snippets: @snippets()
+      value: @content(null, true)
     }
+    return obj

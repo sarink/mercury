@@ -2,14 +2,16 @@ class @Mercury.Snippet
 
   @all: []
 
-  @displayOptionsFor: (name, options = {}, displayOptions = true) ->
-    if displayOptions
+  @displayOptionsFor: (name, modalOptions = {}, showOptions = "true") ->
+    # TODO: showOptions false should insert a snippet with its defaultOptions
+    if true
       Mercury.modal @optionsUrl(name), jQuery.extend({
         title: 'Snippet Options'
         handler: 'insertSnippet'
         snippetName: name
         loadType: Mercury.config.snippets.method
-      }, options)
+        loadData: Mercury.snippet.defaultOptions || {options:{}}
+      }, modalOptions)
     else
       snippet = Mercury.Snippet.create(name)
       Mercury.trigger('action', {action: 'insertSnippet', value: snippet})
@@ -65,19 +67,19 @@ class @Mercury.Snippet
     @version = 0
     @data = ''
     @wrapperTag = 'div'
-    @wrapperClass = ''
     @history = new Mercury.HistoryBuffer()
     @setOptions(options)
 
 
   getHTML: (context, callback = null) ->
-    elementClass = "#{@name}-snippet"
-    elementClass += " #{@wrapperClass}" if @wrapperClass
     element = jQuery("<#{@wrapperTag}>", {
-      class: elementClass
+      class: "#{@name}-snippet"
       contenteditable: "false"
+      'draggable': "true"
       'data-snippet': @identity
-      'data-version': @version
+      'data-snippet_name': @name
+      'data-snippet_options': JSON.stringify(@options)
+      'data-snippet_version': @version
     }, context)
     element.html("[#{@identity}]")
     @loadPreview(element, callback)
@@ -116,7 +118,6 @@ class @Mercury.Snippet
     delete(@options['authenticity_token'])
     delete(@options['utf8'])
     @wrapperTag = @options.wrapperTag if @options.wrapperTag
-    @wrapperClass = @options.wrapperClass if @options.wrapperClass
     @version += 1
     @history.push(@options)
 
@@ -131,6 +132,6 @@ class @Mercury.Snippet
 
 
   serialize: ->
-    return $.extend({name: @name}, @options )
+    return $.extend({id: @identity, name: @name}, @options )
 
 

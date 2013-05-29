@@ -34,9 +34,9 @@ class @Mercury.Regions.Markdown extends Mercury.Region
     @resize()
 
 
-  dataAttributes: ->
+  saveAttributes: ->
     data = {}
-    data[attr] = @container.attr('data-' + attr) for attr in Mercury.config.regions.dataAttributes
+    data[attr] = @container.attr('data-' + attr) for attr in Mercury.config.regions.saveAttributes
     return data
 
 

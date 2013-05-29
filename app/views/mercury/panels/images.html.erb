@@ -1,0 +1,317 @@
+<div class="mercury-insertMedia-panel">
+  <%= form_for Upload.new, :html => { :multipart => true, :id => "mercury-fileupload"  } do |f| %>
+    <div class="filter">
+      <input class="filter focusable" type="text">
+    </div>
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+    <!-- <div class="fileupload-buttonbar"> -->
+        <!-- The fileinput-button span is used to style the file input field as button -->
+        <span class="btn btn btn-success fileinput-button" style="width: 375px;">
+          <i class="icon-plus icon-white"></i>
+          <span>Drop files here, or click to browse</span>
+          <%= f.file_field :upload %>
+        </span>
+    <!-- </div> -->
+    <!-- The loading indicator is shown during image processing -->
+    <div class="fileupload-loading"></div>
+    <br>
+    <!-- The table listing the files available for upload/download -->
+    <div class="files">
+        
+    </div>
+  <% end %>
+  <hr/>
+  
+<script>
+  var fileUploadErrors = {
+      maxFileSize: 'File is too big',
+      minFileSize: 'File is too small',
+      acceptFileTypes: 'Filetype not allowed',
+      maxNumberOfFiles: 'Max number of files exceeded',
+      uploadedBytes: 'Uploaded bytes exceed file size',
+      emptyResult: 'Empty file upload result'
+  };
+</script>
+
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <div class="template-download fade" data-filter="{%= file.name %}">
+            <hr style="clear: both; margin: 10px 0;" />
+            {% if (file.error) { %}
+            <div class="name">{%= file.name %}</div>
+            <div class="error">
+                <span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}
+            </div>
+            {% } else { %}
+            <div class="preview">
+                <!-- <a href="{%=file.url%}" title="{%=file.name%}" rel="lightbox" data-id="{%=file.id%}"> -->
+                <img draggable="true"
+                     src="{%=file.thumbnail_url%}"
+                     data-snippet_name="image"
+                     data-snippet_show_options="true" 
+                     data-snippet_default_options="{%= JSON.stringify({
+                        src: file.url,
+                        title: file.name,
+                        width: '',
+                        height: '',
+                     }) %}"
+                 />
+            </div>
+            <div class="info">
+                <span class="name">
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-id="{%=file.id%}">{%=file.name%}</a>
+                </span>
+                <span class="size">
+                    {%= o.formatFileSize(file.size) %}
+                </span>
+                <span class="actions">
+                    <div class="edit">
+                        <button class="btn btn-mini btn-primary" style="opacity: 0.3;">
+                            <i class="icon-edit icon-white"></i>
+                        </button>
+                    </div>
+                    <div class="delete">
+                        <button class="btn btn-mini btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
+                            <i class="icon-remove icon-white"></i>
+                            <!-- {%= locale.fileupload.destroy %} -->
+                        </button>
+                    </div>
+                </span>
+            </div>
+            {% } %}
+        </div>
+    {% } %}
+</script>
+
+
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <div class="template-upload fade">
+            <hr style="clear: both; margin: 10px 0;" />
+            {% if (file.error) { %}
+            {%= file.name %}<br/>
+            {%= o.formatFileSize(file.size) %}<br/>
+            <span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}<br/>
+            <span class="cancel">
+                {% if (!i) { %}
+                <button class="btn btn-mini btn-danger">
+                    <i class="icon-remove icon-white"></i>
+                    <!-- {%=locale.fileupload.cancel%} -->
+                </button>
+                {% } %}
+            </span>
+            
+            {% } else if (o.files.valid && !i) { %}
+            <div class="preview">
+                <span class="fade"></span>
+            </div>
+            <div class="info">
+                <span class="name">
+                    <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}" data-id="{%=file.id%}">{%=file.name%}</a>
+                </span>
+                <span class="size">
+                    {%= o.formatFileSize(file.size) %}
+                </span>
+                <span class="actions">
+                    <div class="progress progress-success progress-striped active">
+                        <div class="bar" style="width:0%;"></div>
+                    </div>
+                    <div class="start">
+                        {% if (!o.options.autoUpload) { %}
+                        <button class="btn btn-mini btn-success">
+                            <i class="icon-upload icon-white"></i>
+                            <!-- {%=locale.fileupload.start%} -->
+                        </button>
+                        {% } %}
+                    </div>
+                    <div class="cancel">
+                        {% if (!i) { %}
+                        <button class="btn btn-mini btn-danger">
+                            <i class="icon-remove icon-white"></i>
+                            <!-- {%=locale.fileupload.cancel%} -->
+                        </button>
+                        {% } %}
+                    </div>
+                </span>
+            </div>
+            {% } %}
+        </div>
+    {% } %}
+</script>
+
+
+
+
+<!--
+<script id="template-download" type="text/x-tmpl">
+  {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+      {% if (file.error) { %}
+        <td></td>
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+        {% } else { %}
+        <td class="preview">{% if (file.thumbnail_url) { %}
+          <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery" download="{%=file.name%}" data-id="{%=file.id%}">
+              <img draggable="true" src="{%=file.thumbnail_url%}" data-snippet_name="image" data-snippet_default_options="{%=file.snippetDefaultOptions%}" data-snippet_show_options="true" >
+          </a>
+          {% } %}</td>
+        <td class="name">
+          <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}" data-id="{%=file.id%}">{%=file.name%}</a>
+        </td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        {% } %}
+      <td class="delete">
+        <button class="btn btn-mini btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
+          <i class="icon-trash icon-white"></i>
+          <span>{%=locale.fileupload.destroy%}</span>
+          <span></span>
+        </button>
+        <input type="checkbox" name="delete" value="1">
+      </td>
+    </tr>
+    {% } %}
+</script>
+
+
+<script id="template-upload" type="text/x-tmpl">
+  {% for (var i=0, file; file=o.files[i]; i++) { %}
+  <tr class="template-upload fade">
+    <td class="preview"><span class="fade"></span></td>
+    <td class="name"><span>{%=file.name%}</span></td>
+    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+    {% if (file.error) { %}
+    <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+    {% } else if (o.files.valid && !i) { %}
+    <td>
+      <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
+    </td>
+    <td class="start">{% if (!o.options.autoUpload) { %}
+      <button class="btn btn-mini btn-primary">
+        <i class="icon-upload icon-white"></i>
+        <span>{%=locale.fileupload.start%}</span>
+      </button>
+      {% } %}</td>
+    {% } else { %}
+    <td colspan="2"></td>
+    {% } %}
+    <td class="cancel">{% if (!i) { %}
+      <button class="btn btn-mini btn-warning">
+        <i class="icon-ban-circle icon-white"></i>
+        <span>{%=locale.fileupload.cancel%}</span>
+        <span></span>
+      </button>
+      {% } %}</td>
+  </tr>
+  {% } %}
+</script>
+    
+    
+    
+    
+<form id="mercury_media" class="form-horizontal" style="width:615px">
+
+  <div class="form-inputs mercury-display-pane-container">
+
+    <fieldset>
+      <legend>Images</legend>
+      <div class="control-group url optional">
+        <label class="url optional control-label" for="media_image_url">
+          <input name="media_type" type="radio" value="image_url" checked="checked"/>URL
+        </label>
+        <div class="controls">
+          <input class="span6 string url optional" id="media_image_url" name="media[image_url]" size="50" type="text">
+        </div>
+      </div>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Videos</legend>
+      <div class="control-group url optional">
+        <label class="url optional control-label" for="media_youtube_url">
+          <input name="media_type" type="radio" value="youtube_url"/>YouTube URL
+        </label>
+        <div class="controls">
+          <input class="span6 string url optional" id="media_youtube_url" name="media[youtube_url]" size="50" type="text" placeholder="http://youtu.be/Pny4hoN8eII">
+        </div>
+      </div>
+      <div class="control-group url optional">
+        <label class="url optional control-label" for="media_vimeo_url">
+          <input name="media_type" type="radio" value="vimeo_url"/>Vimeo URL
+        </label>
+        <div class="controls">
+          <input class="span6 string url optional" id="media_vimeo_url" name="media[vimeo_url]" size="50" type="text" placeholder="http://vimeo.com/25708134">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Options</legend>
+      <div class="media-options" id="image_url_options">
+        <div class="control-group select optional">
+          <label class="select optional control-label" for="media_image_alignment">Alignment</label>
+          <div class="controls">
+            <select class="select optional" id="media_image_alignment" name="media[image_alignment]">
+              <option value="">None</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+              <option value="top">Top</option>
+              <option value="middle">Middle</option>
+              <option value="bottom">Bottom</option>
+              <option value="absmiddle">Absolute Middle</option>
+              <option value="absbottom">Absolute Bottom</option>
+            </select>
+          </div>
+          <label class="select optional control-label" for="media_image_float">Float</label>
+          <div class="controls">
+            <select class="select optional" id="media_image_float" name="media[image_float]">
+              <option value="">None</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+              <option value="none">None</option>
+              <option value="inherit">Inherit</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="media-options" id="youtube_url_options" style="display:none">
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="media_youtube_width">Width</label>
+          <div class="controls">
+            <input class="span2 number optional" id="media_youtube_width" name="media[youtube_width]" size="50" type="number" value="560">
+          </div>
+        </div>
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="media_youtube_height">Height</label>
+          <div class="controls">
+            <input class="span2 number optional" id="media_youtube_height" name="media[youtube_height]" size="50" type="number" value="349">
+          </div>
+        </div>
+      </div>
+      <div class="media-options" id="vimeo_url_options" style="display:none">
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="media_vimeo_width">Width</label>
+          <div class="controls">
+            <input class="span2 number optional" id="media_vimeo_width" name="media[vimeo_width]" size="50" type="number" value="400">
+          </div>
+        </div>
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="media_vimeo_height">Height</label>
+          <div class="controls">
+            <input class="span2 number optional" id="media_vimeo_height" name="media[vimeo_height]" size="50" type="number" value="225">
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+  </div>
+  <div class="form-actions mercury-display-controls">
+    <input class="btn btn-primary" name="commit" type="submit" value="Insert Media"/>
+  </div>
+
+</form>
+-->

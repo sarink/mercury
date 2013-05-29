@@ -1,8 +1,9 @@
 describe "Mercury.dialogHandlers.foreColor", ->
 
+  template 'mercury/dialogs/forecolor.html'
+
   beforeEach ->
-    fixture.load('mercury/dialogs/forecolor.html')
-    @dialog = {element: $(fixture.el), button: $('#button')}
+    @dialog = {element: $('#test'), button: $('#button')}
     Mercury.dialogHandlers.foreColor.call(@dialog)
 
   describe "when a .picker or .last-picked element is clicked", ->

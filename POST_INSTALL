@@ -1,6 +1,6 @@
 +============================================================================+
 Congratulations, Mercury was successfully installed in your app. Documentation
-and other useful info can be found at: https://github.com/jejacks0n/mercury
+and other useful info can be found at: https://github.com/jejacks0n/mercury and https://github.com/sarink/mercury
 
 Here's a post install checklist:
 
@@ -8,14 +8,5 @@ Here's a post install checklist:
 
 * Learn about, and change configurations in app/assets/javascripts/mercury.js.
 
-* If installed, you can make changes to the provided layout and css files too.
+* Your default admin user is "admin", "admin@admin.com", "admin123"
 
-* If you want image processing and uploading (using paperclip by default):
-
-  rails g mercury:install:images (use --orm=mongoid for MongoDB)
-  bundle
-  rake db:migrate (if using ActiveRecord)
-
-* For a basic example of authentication for Mercury, install the example:
-
-  rails g mercury:install:authentication

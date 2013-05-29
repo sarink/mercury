@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   # Runtime Dependencies
   s.add_dependency 'railties', '>= 3.2'
   s.add_dependency 'coffee-rails', '>= 3.2.2'
+  s.add_dependency 'jquery-ui-rails', '2.0.2'
 
   # Gem Files
   s.extra_rdoc_files  = %w(LICENSE POST_INSTALL)

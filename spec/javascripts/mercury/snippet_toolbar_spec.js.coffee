@@ -1,7 +1,8 @@
 describe "Mercury.SnippetToolbar", ->
 
+  template 'mercury/snippet_toolbar.html'
+
   beforeEach ->
-    fixture.load('mercury/snippet_toolbar.html')
     $.fx.off = true
 
   afterEach ->
@@ -28,7 +29,7 @@ describe "Mercury.SnippetToolbar", ->
   describe "#build", ->
 
     it "builds an element", ->
-      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: fixture.el})
+      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test'})
       html = $('<div>').html(@snippetToolbar.element).html()
       expect(html).toContain('class="mercury-toolbar mercury-snippet-toolbar"')
       expect(html).toContain('style="display:none"')
@@ -41,7 +42,7 @@ describe "Mercury.SnippetToolbar", ->
   describe "observed events", ->
 
     beforeEach ->
-      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: fixture.el})
+      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test'})
 
     describe "custom event: show:toolbar", ->
 
@@ -71,14 +72,14 @@ describe "Mercury.SnippetToolbar", ->
 
       it "clears the hide timeout", ->
         spy = spyOn(window, 'clearTimeout').andCallFake(=>)
-        jasmine.simulate.mousemove($('.mercury-snippet-toolbar', fixture.el).get(0))
+        jasmine.simulate.mousemove($('#test .mercury-snippet-toolbar').get(0))
         expect(spy.callCount).toEqual(1)
 
     describe "mouseout", ->
 
       it "calls hide", ->
         spy = spyOn(Mercury.SnippetToolbar.prototype, 'hide').andCallFake(=>)
-        jasmine.simulate.mouseout($('.mercury-snippet-toolbar', fixture.el).get(0))
+        jasmine.simulate.mouseout($('#test .mercury-snippet-toolbar').get(0))
         expect(spy.callCount).toEqual(1)
 
     describe "releasing events", ->
@@ -98,7 +99,7 @@ describe "Mercury.SnippetToolbar", ->
   describe "#show", ->
 
     beforeEach ->
-      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: fixture.el})
+      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test'})
       @positionSpy = spyOn(Mercury.SnippetToolbar.prototype, 'position').andCallFake(=>)
       @appearSpy = spyOn(Mercury.SnippetToolbar.prototype, 'appear').andCallFake(=>)
 
@@ -119,7 +120,7 @@ describe "Mercury.SnippetToolbar", ->
 
     beforeEach ->
       Mercury.displayRect = {top: 20}
-      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: fixture.el, visible: true})
+      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test', visible: true})
       @snippetToolbar.snippet = $('#snippet')
 
     it "positions itself based on the snippet", ->
@@ -127,14 +128,14 @@ describe "Mercury.SnippetToolbar", ->
       @snippetToolbar.position()
       # use a tolerance since there are measurement differences between browsers we want it between 14-18
       expect(@snippetToolbar.element.offset().top).toBeLessThan(19)
-      expect(@snippetToolbar.element.offset().top).toBeGreaterThan(0)
+      expect(@snippetToolbar.element.offset().top).toBeGreaterThan(13)
       expect(@snippetToolbar.element.offset().left).toEqual(200)
 
 
   describe "#appear", ->
 
     beforeEach ->
-      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: fixture.el})
+      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test'})
 
     it "clears the hide timeout", ->
       spy = spyOn(window, 'clearTimeout').andCallFake(=>)
@@ -153,7 +154,7 @@ describe "Mercury.SnippetToolbar", ->
   describe "#hide", ->
 
     beforeEach ->
-      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: fixture.el})
+      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test'})
 
     afterEach -> @snippetToolbar.release()
 

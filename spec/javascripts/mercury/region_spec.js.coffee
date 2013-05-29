@@ -1,9 +1,10 @@
 describe "Mercury.Region", ->
 
+  template 'mercury/region.html'
+
   beforeEach ->
-    fixture.load('mercury/region.html')
     Mercury.config.regions.attribute = 'custom-region-attribute'
-    Mercury.config.regions.dataAttributes = []
+    Mercury.config.regions.saveAttributes = []
 
   afterEach ->
     @region = null
@@ -156,7 +157,7 @@ describe "Mercury.Region", ->
         expect(@triggerSpy.argsForCall[0]).toEqual(['hide:toolbar', {type: 'snippet', immediately: false}])
 
 
-  describe "#content", ->
+  describe "#html", ->
 
     beforeEach ->
       @region = new Mercury.Region($('#region_with_snippet'), window)
@@ -170,10 +171,6 @@ describe "Mercury.Region", ->
       it "replaces snippet content with an indentifier if asked", ->
         content = @region.content(null, true)
         expect(content).toEqual('contents<div class="example-snippet" data-snippet="snippet_1">[snippet_1]</div>')
-
-      it "does not execute JavaScript contained within the region (bug fix)", ->
-        (new Mercury.Region($('#region_with_javascript_snippet'), window)).content()
-        expect($('#modifiable-element').children().length).toEqual(0)
 
     describe "setting html", ->
 
@@ -261,19 +258,19 @@ describe "Mercury.Region", ->
     it "does nothing and is there as an interface", ->
 
 
-  describe "#dataAttributes", ->
+  describe "#saveAttributes", ->
 
     beforeEach ->
-      Mercury.config.regions.dataAttributes = ['scope', 'version']
+      Mercury.config.regions.saveAttributes = ['data-scope', 'data-version']
       @region = new Mercury.Region($('#region'), window)
 
     it "returns an object of data attributes based on configuration", ->
       @region.element.attr('data-version', 2)
-      expect(@region.dataAttributes()).toEqual({scope: 'scope', version: '2'})
+      expect(@region.saveAttributes()).toEqual({scope: 'scope', version: '2'})
 
     it "looks to @container if it's set", ->
       @region.container = $('<div>').attr('data-version', 3)
-      expect(@region.dataAttributes()).toEqual({scope: undefined, version: '3'})
+      expect(@region.saveAttributes()).toEqual({scope: undefined, version: '3'})
 
 
   describe "#serialize", ->
@@ -293,7 +290,7 @@ describe "Mercury.Region", ->
     describe "with data attributes configured", ->
 
       beforeEach ->
-        Mercury.config.regions.dataAttributes = ['scope', 'version']
+        Mercury.config.regions.saveAttributes = ['data-scope', 'data-version']
 
       it "returns an object with it's type, value, data and snippets", ->
         serialized = @region.serialize()

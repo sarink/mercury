@@ -40,13 +40,20 @@ class @Mercury.Regions.Snippets extends Mercury.Region
     @element.on 'dragover', (event) =>
       return if @previewing
       event.preventDefault()
-      event.originalEvent.dataTransfer.dropEffect = 'copy'
+      snippet = Mercury.snippet
+      if @acceptSnippet(snippet)
+        event.originalEvent.dataTransfer.dropEffect = 'copy'
+      else
+        event.originalEvent.dataTransfer.dropEffect = 'none'
 
     @element.on 'drop', (event) =>
       return if @previewing || ! Mercury.snippet
-      @focus()
       event.preventDefault()
-      Mercury.Snippet.displayOptionsFor(Mercury.snippet.name, {}, Mercury.snippet.hasOptions)
+      snippet = Mercury.snippet
+      if @acceptSnippet(snippet)
+        @focus()
+        Mercury.Snippet.displayOptionsFor(snippet.name, {}, snippet.showOptions)
+        @document.execCommand('undo', false, null)
 
     jQuery(@document).on 'keydown', (event) =>
       return if @previewing || Mercury.region != @
@@ -74,6 +81,15 @@ class @Mercury.Regions.Snippets extends Mercury.Region
       @element.sortable('destroy')
       @element.removeClass('focus')
     super
+    
+    
+  acceptSnippet: (snippet) ->
+    if (snippet)
+      return @element.data('accepted_snippets') == '*' ||
+             @element.data('accepted_snippets').indexOf(snippet.name) != -1 &&
+             @element.find('[data-snippet]').length < @element.data('number_of_snippets')
+     else
+      return false
 
 
   execCommand: (action, options = {}) ->

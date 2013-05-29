@@ -1,6 +1,6 @@
 class @Mercury.Regions.Full extends Mercury.Region
-  # No IE < 10 support because those versions don't follow the W3C standards for HTML5 contentEditable (aka designMode).
-  @supported: document.designMode && !jQuery.browser.konqueror && (!jQuery.browser.msie || (jQuery.browser.msie && parseFloat(jQuery.browser.version, 10) >= 10))
+  # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
+  @supported: document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
   @supportedText: "Chrome 10+, Firefox 4+, Safari 5+, Opera 11.64+"
   type = 'full'
   type: -> type
@@ -61,42 +61,56 @@ class @Mercury.Regions.Full extends Mercury.Region
 
     @element.on 'dragenter', (event) =>
       return if @previewing
-      event.preventDefault() unless Mercury.snippet
-      event.originalEvent.dataTransfer.dropEffect = 'copy'
+      # event.preventDefault() # unless Mercury.snippet
+      # event.originalEvent.dataTransfer.dropEffect = 'copy'
 
     @element.on 'dragover', (event) =>
       return if @previewing
-      event.preventDefault() unless Mercury.snippet
-      event.originalEvent.dataTransfer.dropEffect = 'copy'
-      # removed to fix chrome update issue #362 https://github.com/jejacks0n/mercury/issues/362
+      event.preventDefault()
+      snippet = Mercury.snippet
+      if @acceptSnippet(snippet)
+        event.originalEvent.dataTransfer.dropEffect = 'copy'
+      else
+        event.originalEvent.dataTransfer.dropEffect = 'none'
+      # event.preventDefault() # unless Mercury.snippet
+      # event.originalEvent.dataTransfer.dropEffect = 'copy'
       # if jQuery.browser.webkit
         # clearTimeout(@dropTimeout)
         # @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 10)
 
     @element.on 'drop', (event) =>
-      return if @previewing
-
-      # handle dropping snippets
-      clearTimeout(@dropTimeout)
-      @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 1)
-
-      # handle any files that were dropped
-      return unless event.originalEvent.dataTransfer.files.length
+      return if @previewing || ! Mercury.snippet
       event.preventDefault()
-      @focus()
-      Mercury.uploader(event.originalEvent.dataTransfer.files[0])
+      snippet = Mercury.snippet
+      if @acceptSnippet(snippet)
+        @focus()
+        Mercury.Snippet.displayOptionsFor(snippet.name, {}, snippet.showOptions)
+        @document.execCommand('undo', false, null)
+      # if Mercury.snippet
+        # @focus()
+        # Mercury.Snippet.displayOptionsFor(Mercury.snippet.name, {options: { image_source: "HI"}}, Mercury.snippet.hasOptions && Mercury.snippet.showOptionsOnDrag)
+        # @document.execCommand('undo', false, null)
+      # # handle dropping snippets
+      # clearTimeout(@dropTimeout)
+      # @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 1)
+      # # handle any files that were dropped
+      # return unless event.originalEvent.dataTransfer.files.length
+      # event.preventDefault()
+      # @focus()
+      # Mercury.uploader(event.originalEvent.dataTransfer.files[0])
 
     # possible:drop custom event: we have to do this because webkit doesn't fire the drop event unless both dragover and
     # dragstart default behaviors are canceled.. but when we do that and observe the drop event, the default behavior
     # isn't handled (eg, putting the image where it was dropped,) so to allow the browser to do it's thing, and also do
     # our thing we have this little hack.  *sigh*
     # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
-    @element.on 'possible:drop', =>
-      return if @previewing
-      if Mercury.snippet
-        @focus()
-        Mercury.Snippet.displayOptionsFor(Mercury.snippet.name, {}, Mercury.snippet.hasOptions)
-        @document.execCommand('undo', false, null)
+    
+    # @element.on 'possible:drop', =>
+      # return if @previewing
+      # if Mercury.snippet
+        # @focus()
+        # Mercury.Snippet.displayOptionsFor(Mercury.snippet.name, {}, Mercury.snippet.hasOptions)
+        # @document.execCommand('undo', false, null)
 
     # custom paste handling: we have to do some hackery to get the pasted content since it's not exposed normally
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
@@ -192,6 +206,11 @@ class @Mercury.Regions.Full extends Mercury.Region
       Mercury.changes = true
 
 
+  acceptSnippet: (snippet) ->
+    return @element.data('accepted_snippets') == '*' ||
+           @element.data('accepted_snippets').indexOf(snippet.name) != -1 &&
+           @element.find('[data-snippet]').length < @element.data('number_of_snippets')
+
   focus: ->
     if Mercury.region != @
       setTimeout((=> @element.focus()), 10)
@@ -251,7 +270,8 @@ class @Mercury.Regions.Full extends Mercury.Region
         element = jQuery(element)
         if snippet = Mercury.Snippet.find(element.data("snippet"))
           snippet.data = element.html()
-        element.html("[#{element.data("snippet")}/#{element.data("version")}]")
+        # element.html("[#{element.data("snippet")}/#{element.data("version")}]")
+        element.html("[#{element.data("snippet")}]")
         element.attr({contenteditable: null, 'data-version': null})
 
       # get the html before removing the markers
@@ -454,6 +474,7 @@ class @Mercury.Regions.Full extends Mercury.Region
 
     insertSnippet: (selection, options) ->
       snippet = options.value
+      console.log("HERE!",snippet)
       if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
         selection.selectNode(existing.get(0))
       selection.insertNode(snippet.getHTML(@document))

@@ -1,7 +1,8 @@
 describe "Mercury.tooltip", ->
 
+  template 'mercury/tooltip.html'
+
   beforeEach ->
-    fixture.load('mercury/tooltip.html')
     @forElement = $('#for_element')
     $.fx.off = true
 

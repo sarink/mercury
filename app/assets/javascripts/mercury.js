@@ -2,9 +2,10 @@
  * Mercury Editor is a CoffeeScript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
  * found at https://github.com/jejacks0n/mercury
  *
+ * 
  * Minimum jQuery requirements are 1.7
  *= require_self
- *
+ * 
  * You can include the Rails jQuery ujs script here to get some nicer behaviors in modals, panels and lightviews when
  * using :remote => true within the contents rendered in them.
  * require jquery_ujs
@@ -25,6 +26,10 @@
  *
  * Require any files you want to use that either extend, or change the default Mercury behavior.
  * require mercury_overrides
+ * 
+ *= require mercury/bootstrap/bootstrap
+ *= require mercury/blueimp-fileupload
+ *= require mercury/blueimp-imagegallery/jquery.image-gallery
  */
 window.Mercury = {
 
@@ -52,31 +57,40 @@ window.Mercury = {
     // ### The available button types are:
     //
     // - toggle:    toggles on or off when clicked, otherwise behaves like a button
+    
     // - modal:     opens a modal window, expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
+    
     // - lightview: opens a lightview window (like modal, but different UI), expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
+    
     // - panel:     opens a panel dialog, expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
+    
     // - palette:   opens a palette window, expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
+    
     // - select:    opens a pulldown style window, expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
+    
     // - context:   calls a callback function, expects the action to be:
     //   1. a function that returns a boolean to highlight the button
     //   note: if a function isn't provided, the key will be passed to the contextHandler, in which case a default
     //         context will be used (for more info read the Contexts section below)
+    
     // - mode:      toggle a given mode in the editor, expects the action to be:
     //   1. a string, denoting the name of the mode
     //   note: it's assumed that when a specific mode is turned on, all other modes will be turned off, which happens
     //         automatically, thus putting the editor into a specific "state"
+    
     // - regions:   allows buttons to be enabled/disabled based on what region type has focus, expects:
     //   1. an array of region types (eg. ['full', 'markdown'])
+    
     // - preload:   allows some dialog views to be loaded when the button is created instead of on first open, expects:
     //   1. a boolean true / false
     //   note: this is only used by panels, selects, and palettes
@@ -100,15 +114,21 @@ window.Mercury = {
           redo:                ['Redo', 'Redo your last action'],
           sep:                 ' '
           },
+        snippetPanel:          ['Snippets', 'Snippet Panel', { panel: '/mercury/panels/snippets.html' }],
+        insertMedia:           [' Images', 'Insert Images', { panel: '/mercury/panels/images.html' }],
         insertLink:            ['Link', 'Insert Link', { modal: '/mercury/modals/link.html', regions: ['full', 'markdown'] }],
-        insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media.html', regions: ['full', 'markdown'] }],
+        // TODO: rename insertMedia to insertImage
+        // insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media.html', regions: ['full', 'markdown'] }],
         insertTable:           ['Table', 'Insert Table', { modal: '/mercury/modals/table.html', regions: ['full', 'markdown'] }],
         insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character.html', regions: ['full', 'markdown'] }],
-        snippetPanel:          ['Snippet', 'Snippet Panel', { panel: '/mercury/panels/snippets.html' }],
         sep2:                  ' ',
-        historyPanel:          ['History', 'Page Version History', { panel: '/mercury/panels/history.html' }],
+        // TODO: finish implementing user system
+        // for now users can still be managed via rails_admin
+        // userPanel:             ['Users', 'Manage Users', {panel: '/mercury/panels/users.html'}],
+        historyPanel:          ['History', 'Pages History', { panel: '/mercury/panels/history.html' }],
+        // notesPanel:            ['Notes', 'Page Notes', { panel: '/mercury/panels/notes.html' }],
         sep3:                  ' ',
-        notesPanel:            ['Notes', 'Page Notes', { panel: '/mercury/panels/notes.html' }]
+        railsAdmin:            ['Advanced', 'Rails Admin'],
         },
 
       editable: {
@@ -179,7 +199,7 @@ window.Mercury = {
           sep2:                ' '
           },
         editors:               {
-          htmlEditor:          ['Edit HTML', 'Edit the HTML content', { regions: ['full'] }]
+          htmlEditor:          ['Edit HTML', 'Edit the HTML content', { regions: ['full'] }],
           }
         },
 
@@ -198,7 +218,7 @@ window.Mercury = {
     //
     // You can customize some aspects of how regions are found, identified, and saved.
     //
-    // attribute: Mercury identifies editable regions by a data-mercury attribute.  This attribute has to be added in
+    // attribute: Mercury identifies editable regions by a data-region_type attribute.  This attribute has to be added in
     // your HTML in advance, and is the only real code/naming exposed in the implementation of Mercury.  To allow this
     // to be as configurable as possible, you can set the name of this attribute.  If you change this, you should adjust
     // the injected styles as well.
@@ -207,19 +227,18 @@ window.Mercury = {
     // By default this is the id attribute but can be changed to a data attribute should you want to use something
     // custom instead.
     //
-    // dataAttributes: The dataAttributes is an array of data attributes that will be serialized and returned to the
+    // saveAttributes: The saveAttributes is an array of data attributes that will be serialized and returned to the
     // server upon saving.  These attributes, when applied to a Mercury region element, will be automatically serialized
-    // and submitted with the AJAX request sent when a page is saved.  These are expected to be HTML5 data attributes,
-    // and 'data-' will automatically be prepended to each item in this directive. (ex. ['scope', 'version'])
+    // and submitted with the AJAX request sent when a page is saved.
     //
     // determineType: This function is called after checking the data-type attribute for the correct field type. Use
     // it if you want to dynamically set the type based on inspection of the region.
     regions: {
-      attribute: 'data-mercury',
-      identifier: 'id',
-      dataAttributes: []
+      attribute: 'data-region_type',
+      identifier: 'data-region_name',
+      saveAttributes: ['data-accepted_snippets', 'data-number_of_snippets'] // region_name and region_type have been intentionally left off of the saveAttributes list
       // determineType: function(region){},
-      },
+    },
 
 
     // ## Snippet Options / Preview
@@ -241,7 +260,7 @@ window.Mercury = {
       method: 'POST',
       optionsUrl: '/mercury/snippets/:name/options.html',
       previewUrl: '/mercury/snippets/:name/preview.html'
-      },
+    },
 
 
     // ## Image Uploading
@@ -268,14 +287,19 @@ window.Mercury = {
     // modify the response from the server.  This can be useful if your server doesn't respond the way Mercury expects.
     // The handler function should take the response from the server and return an object that matches:
     // `{image: {url: '[your provided url]'}`
+    
+    // set to false, we created our own uploader
     uploading: {
-      enabled: true,
-      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
-      maxFileSize: 1235242880,
-      inputName: 'image[image]',
-      url: '/mercury/images',
-      handler: false
-      },
+        enabled: false
+    },
+    // uploading: {
+      // enabled: true,
+      // allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
+      // maxFileSize: 1235242880,
+      // inputName: 'image[image]',
+      // url: '/mercury/images',
+      // handler: false
+    // },
 
 
     // ## Localization / I18n
@@ -294,7 +318,7 @@ window.Mercury = {
     localization: {
       enabled: false,
       preferredLocale: 'swedish_chef-BORK'
-      },
+     },
 
 
     // ## Behaviors
@@ -311,9 +335,10 @@ window.Mercury = {
     // You can see how the behavior matches up directly with the button names.  It's also important to note that the
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
     behaviors: {
-      //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
-      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
-      },
+      foreColor: function(selection, options) {
+          selection.wrap('<span style="color:' + options.value.toHex() + '">', true) 
+      }
+    },
 
 
     // ## Global Behaviors
@@ -324,19 +349,28 @@ window.Mercury = {
     //
     // An example of changing how saving works:
     //
-    //     save: function() {
-    //       var data = top.JSON.stringify(this.serialize(), null, '  ');
-    //       var content = '<textarea style="width:500px;height:200px" wrap="off">' + data + '</textarea>';
-    //       Mercury.modal(null, {title: 'Saving', closeButton: true, content: content})
-    //     }
     //
     // This is a nice way to add functionality, when the behaviors aren't region specific.  These can be triggered by a
     // button, or manually with `Mercury.trigger('action', {action: 'barrelRoll'})`
     globalBehaviors: {
-      exit: function() { window.location.href = this.iframeSrc() },
-      barrelRoll: function() { $('body').css({webkitTransform: 'rotate(360deg)'}) }
+      exit: function() {
+          window.location.href = this.iframeSrc()
       },
-
+      barrelRoll: function() {
+          $('body').css({webkitTransform: 'rotate(360deg)'});
+      },
+      htmlEditor: function() {
+          Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' });
+      },
+      railsAdmin: function() {
+          Mercury.lightview('/mercury/lightviews/railsadmin.html', { fullSize: true, handler: 'railsAdmin'});
+      }
+    // ,save: function() {
+      // var data = top.JSON.stringify(this.serialize(), null, '  ');
+      // var content = '<textarea style="width:500px;height:200px" wrap="off">' + data + '</textarea>';
+      // Mercury.modal(null, {title: 'Saving', closeButton: true, content: content});
+    // }
+   },
 
     // ## Ajax and CSRF Headers
     //
@@ -384,8 +418,7 @@ window.Mercury = {
     // the allowed attributes array is empty, all attributes will be removed.  If a tag is not present in this list, it
     // will be removed, but without removing any of the text or tags inside it.
     //
-    // **Note:** Content is *always* sanitized if looks like it's from MS Word or similar editors regardless of this
-    // configuration.
+    // **Note:** Content is *always* sanitized if looks like it's from MS Word or similar editors regardless of this configuration
     pasting: {
       sanitize: 'whitelist',
       whitelist: {
@@ -428,15 +461,15 @@ window.Mercury = {
     // need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
     // styles are injected into your document, and as simple as they might be, you may want to change them.
     injectedStyles: '' +
-      '[data-mercury]       { min-height: 10px; outline: 1px dotted #09F } ' +
-      '[data-mercury]:focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
-      '[data-mercury].focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
-      '[data-mercury]:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
-      '[data-mercury] table { border: 1px dotted red; min-width: 6px; }' +
-      '[data-mercury] th    { border: 1px dotted red; min-width: 6px; }' +
-      '[data-mercury] td    { border: 1px dotted red; min-width: 6px; }' +
-      '[data-mercury] .mercury-textarea       { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }' +
-      '[data-mercury] .mercury-textarea:focus { outline: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }'
+      '[data-region_type]       { min-height: 10px; outline: 1px dotted #09F } ' +
+      '[data-region_type]:focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
+      '[data-region_type].focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
+      '[data-region_type]:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
+      '[data-region_type] table { border: 1px dotted red; min-width: 6px; }' +
+      '[data-region_type] th    { border: 1px dotted red; min-width: 6px; }' +
+      '[data-region_type] td    { border: 1px dotted red; min-width: 6px; }' +
+      '[data-region_type] .mercury-textarea       { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }' +
+      '[data-region_type] .mercury-textarea:focus { outline: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }'
   },
 
   // ## Silent Mode
@@ -448,5 +481,43 @@ window.Mercury = {
   //
   // Turning debug mode on will log events and other various things (using console.debug if available).
   debug: false
-
 };
+
+
+// put all extra configurations in here
+jQuery(window).on("mercury:ready", function() {
+    var $frame = $("#mercury_iframe").contents();
+    
+    // preload existing snippets
+    $frame.find("*[data-snippet]").each(function() {
+        var $this = $(this);
+        var snip = [];
+        snip[$this.data("snippet")] = $.extend({name: $this.data("snippet_name")}, $this.data("snippet_options"));
+        Mercury.Snippet.load(snip);
+    });
+    
+    $frame.find("*[draggable=true]").css("cursor", "move");
+    
+    // when we begin dragging a snippet from one of the panels/modals (defined by anything having a data-snippet_name attribute)..
+    // we manually create a Mercury.snippet object from the DOM element using its 3 data-attributes:
+    // data-snippet_name: the snippet name
+    // data-snippet_default_options: a JSON hash of options that will be used to prepopulate the /mercury/snippets/:name/options.html.erb form
+    // data-snippet_show_options: "true" or "false" string if we want to pop up the options modal when it is dropped, or just insert it with the default options
+    $(document).on("dragstart", "*[data-snippet_name]", function(event) {
+        var $target = $(event.currentTarget);
+        Mercury.snippet = {
+            name: $target.data("snippet_name"),
+            defaultOptions: {options: $target.data("snippet_default_options")} || {options:{}},
+            showOptions: $target.data("snippet_show_options") || "true"
+        };
+    });
+    $(document).on("dragend", "*[data-snippet_name]", function(event) {
+        Mercury.snippet = null;
+    });  
+});
+
+jQuery(window).on("mercury:saved", function() {
+    window.location = window.location.href.replace(/\/editor\//i, "/");
+});
+
+

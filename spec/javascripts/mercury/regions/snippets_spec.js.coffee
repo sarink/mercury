@@ -1,7 +1,8 @@
 describe "Mercury.Regions.Snippets", ->
 
+  template 'mercury/regions/snippets.html'
+
   beforeEach ->
-    fixture.load('mercury/regions/snippets.html')
     @regionElement = $('#snippets_region1')
 
   afterEach ->
@@ -270,8 +271,9 @@ describe "Mercury.Regions.Snippets", ->
 
 describe "Mercury.Regions.Snippets.actions", ->
 
+  template 'mercury/regions/snippets.html'
+
   beforeEach ->
-    fixture.load('mercury/regions/snippets.html')
     @region = new Mercury.Regions.Snippets($('#snippets_region2'), window)
     @actions = Mercury.Regions.Snippets.actions
 
@@ -300,7 +302,6 @@ describe "Mercury.Regions.Snippets.actions", ->
   describe ".insertSnippet", ->
 
     beforeEach ->
-      Mercury.Snippet.all = []
       Mercury.Snippet.load({
         'snippet_1': {name: 'example', options: {'foo': 'bar'}},
         'snippet_2': {name: 'example', options: {'foo': 'bar'}},

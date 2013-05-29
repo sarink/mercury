@@ -1,8 +1,9 @@
 describe "Mercury.dialogHandlers.snippetPanel", ->
 
+  template 'mercury/dialogs/snippetpanel.html'
+
   beforeEach ->
-    fixture.load('mercury/dialogs/snippetpanel.html')
-    @dialog = {element: $(fixture.el), button: $('#button')}
+    @dialog = {element: $('#test'), button: $('#button')}
     Mercury.dialogHandlers.snippetPanel.call(@dialog)
 
   describe "filter", ->

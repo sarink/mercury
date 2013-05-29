@@ -1,0 +1,7 @@
+<% provide(:title, @page.title) %>
+<script>
+  jQuery(window).on('mercury:ready', function() {
+    Mercury.saveUrl = '/pages/' + <%= @page.id %>;
+  });
+</script>
+<%= render "pages/" + @page.name %>

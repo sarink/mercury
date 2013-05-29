@@ -1,8 +1,9 @@
 describe "Mercury.dialogHandlers.style", ->
 
+  template 'mercury/dialogs/style.html'
+
   beforeEach ->
-    fixture.load('mercury/dialogs/style.html')
-    @dialog = {element: $(fixture.el)}
+    @dialog = {element: $('#test')}
     Mercury.dialogHandlers.style.call(@dialog)
 
   describe "when an element with a data-class attribute is clicked", ->

@@ -2,7 +2,6 @@ describe "Mercury", ->
 
   afterEach: ->
     Mercury.config.localization.enabled = false
-    window.console ||= {}
 
   describe "supported:", ->
 
@@ -51,8 +50,7 @@ describe "Mercury", ->
   describe ".warn", ->
 
     beforeEach ->
-      window.console.warn ||= -> ''
-      window.console.trace ||= -> ''
+      window.console = {warn: (-> ''), trace: (-> '')}
       @warnSpy = spyOn(window.console, 'warn').andCallFake(=>)
       @notifySpy = spyOn(Mercury, 'notify').andCallFake(=>)
 
@@ -61,18 +59,15 @@ describe "Mercury", ->
       expect(@warnSpy.callCount).toEqual(1)
 
     it "calls Mercury.notify if there's no console", ->
-#      original = window.console.debug
-#      window.console.debug = null
-#      Mercury.warn('message', 2)
-#      expect(@notifySpy.callCount).toEqual(1)
-#      window.console.debug = original
-
+      window.console = null
+      Mercury.warn('message', 2)
+      expect(@notifySpy.callCount).toEqual(1)
 
 
   describe ".log", ->
 
     beforeEach ->
-      window.console.debug ||= ->
+      window.console = {debug: -> ''}
       @debugSpy = spyOn(window.console, 'debug').andCallFake(=>)
       Mercury.debug = true
 
@@ -85,11 +80,10 @@ describe "Mercury", ->
       Mercury.log(1, 2)
       expect(@debugSpy.callCount).toEqual(0)
 
-    it "does nothing if there's no console"
-#      original = window.console.debug
-#      window.console = null
-#      Mercury.log(1, 2)
-#      expect(@debugSpy.callCount).toEqual(0)
+    it "does nothing if there's no console", ->
+      window.console = null
+      Mercury.log(1, 2)
+      expect(@debugSpy.callCount).toEqual(0)
 
 
   describe ".locale", ->
@@ -101,10 +95,10 @@ describe "Mercury", ->
       }
 
     it "memoizes array for what the browsers language is set to (breaks with a different language set)", ->
-#      Mercury.config.localization.enabled = true
-#      expect(Mercury.determinedLocale).toEqual(undefined)
-#      expect(Mercury.locale()).toEqual({top: @translationSource, sub: @translationSource['_US_']})
-#      expect(Mercury.determinedLocale).toEqual({top: @translationSource, sub: @translationSource['_US_']})
+      Mercury.config.localization.enabled = true
+      expect(Mercury.determinedLocale).toEqual(undefined)
+      expect(Mercury.locale()).toEqual({top: @translationSource, sub: @translationSource['_US_']})
+      expect(Mercury.determinedLocale).toEqual({top: @translationSource, sub: @translationSource['_US_']})
 
 
   describe ".I18n", ->

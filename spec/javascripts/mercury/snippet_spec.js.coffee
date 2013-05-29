@@ -1,7 +1,6 @@
 describe "Mercury.Snippet", ->
 
-  beforeEach ->
-    fixture.load('mercury/snippet.html')
+  template 'mercury/snippet.html'
 
   afterEach ->
     Mercury.Snippet.all = []
@@ -61,12 +60,6 @@ describe "Mercury.Snippet", ->
       container.html(ret)
       expect($(container.children()[0]).is('li')).toEqual(true)
 
-    it "adds the specified wrapperClass to the wrapperTag", ->
-      @snippet.wrapperClass = 'something'
-      ret = @snippet.getHTML($(document))
-      container = $('<div>')
-      container.html(ret)
-      expect($(container.children()[0]).hasClass('something')).toEqual(true)
 
   describe "#getText", ->
 

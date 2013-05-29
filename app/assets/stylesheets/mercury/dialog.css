@@ -52,7 +52,7 @@
   color: #333;
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 9.5pt;
-  max-width: 500px;
+  max-width: 1000px;
 }
 .mercury-panel.loading {
   background-repeat: no-repeat;
@@ -175,10 +175,7 @@
 /*
  * Specific Panels (eg. snippets, notes, todos)
  *----------------------------------------------------------------------------*/
-.mercury-snippet-panel {
-  width: 300px;
-}
-.mercury-snippet-panel input.filter {
+.mercury-panel input.filter {
   outline: none;
   font-size: 1em;
   border-radius: 30px;
@@ -191,6 +188,9 @@
   padding-left: 20px;
   background-color: #FFF;
   background-repeat: no-repeat;
+}
+.mercury-snippet-panel {
+  width: 300px;
 }
 .mercury-snippet-panel ul {
   font-size: .9em;
@@ -214,8 +214,35 @@
 .mercury-snippet-panel ul li h4 {
   margin-bottom: 5px;
 }
-/* history / notes */
-.mercury-history-panel,
+/* history */
+.mercury-history-panel {
+    width: 300px;
+}
+/* notes */
 .mercury-notes-panel {
   width: 250px;
+}
+/* insertMedia */
+.mercury-insertMedia-panel {
+    width: 400px;
+}
+/* manageUsers */
+.mercury-manageUsers-panel {
+    width: 350px;
+}
+.mercury-manageUsers-panel .user .info {
+    float: left;
+    display: inline-block;
+    width: 300px;
+}
+.mercury-manageUsers-panel .user .controls {
+    float: left;
+    display: inline-block;
+    width: 50px;
+    padding-top: 10px;
+}
+.mercury-manageUsers-panel .user table.info tr td:first-child {
+    padding-right: 5px;
+    text-align: left;
+    font-weight: bold;
 }

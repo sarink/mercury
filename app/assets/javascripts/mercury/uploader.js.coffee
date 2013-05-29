@@ -1,3 +1,5 @@
+#TODO: Pretty sure this entire file can be removed
+
 @Mercury.uploader = (file, options) ->
   Mercury.uploader.show(file, options) if Mercury.config.uploading.enabled
   return Mercury.uploader

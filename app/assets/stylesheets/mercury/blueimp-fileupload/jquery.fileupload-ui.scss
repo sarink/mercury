@@ -1,0 +1,144 @@
+@charset 'UTF-8';
+/*
+ * jQuery File Upload UI Plugin CSS 6.3
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2010, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+
+.files {
+  .template-download, .template-upload {
+    width: 370px;
+    height: auto;
+    padding: 0px;
+    float: left;
+    font-size: 12px;
+    
+    .preview {
+      display: inline-block;
+      float: left;
+      width: 100px;
+    }
+    
+    .info {
+      display: inline-block;
+      float: left;
+      line-height: 12px;
+      padding-left: 10px;
+      width: 260px;
+      
+      span {
+        display: block;
+        padding-bottom: 5px;
+      }
+      span:last-child {
+        padding-bottom: 0px;
+      }
+      
+      .actions {
+        div {
+          float: left;
+          display: inline-block;
+          margin-right: 10px;
+        }
+        div:last-child {
+          margin-right: 0px;
+        }
+      }
+    }
+    
+    .template-upload {
+      .info {
+        .actions {
+          padding-top: 10px;
+          div {
+            display: inline-block;
+            float: left;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+  float: left;
+  margin-right: 4px;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  border: solid transparent;
+  border-width: 0 0 100px 200px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -moz-transform: translate(-300px, 0) scale(4);
+  direction: ltr;
+  cursor: pointer;
+}
+.fileupload-buttonbar {
+  text-align: center;
+}
+.fileupload-buttonbar .btn,
+.fileupload-buttonbar .toggle {
+  margin-bottom: 5px;
+}
+
+.files .progress {
+  width: 180px;
+}
+.progress-animated .bar {
+  background: image-url('progressbar.gif') !important;
+  filter: none;
+}
+.fileupload-loading {
+  position: absolute;
+  left: 50%;
+  width: 128px;
+  height: 128px;
+  background: image-url('loading.gif') center no-repeat;
+  display: none;
+}
+.fileupload-processing .fileupload-loading {
+  display: block;
+}
+
+/* Fix for IE 6: */
+* html .fileinput-button {
+  line-height: 22px;
+  margin: 1px -3px 0 0;
+}
+
+/* Fix for IE 7: */
+* + html .fileinput-button {
+  margin: 1px 0 0 0;
+}
+
+// @media (max-width: 480px) {
+  // .files .btn span {
+    // display: none;
+  // }
+  // .files .preview * {
+    // width: 40px;
+  // }
+  // .files .name * {
+    // width: 80px;
+    // display: inline-block;
+    // word-wrap: break-word;
+  // }
+  // .files .progress {
+    // width: 20px;
+  // }
+  // .files .delete {
+    // width: 60px;
+  // }
+// }

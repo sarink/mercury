@@ -1,4 +1,11 @@
 @Mercury.modalHandlers.insertLink = {
+  # TODO: this entire thing can basically be rewritten.
+  # We should keep the same functionality, but improve the page select functionality
+  # currently there is a bug if you select a page from the dropdown, when you go to edit it
+  # the page will not be selected, instead you will see the generated html in the "url" text field
+  # everything still works, its just a UI error
+  
+  # Perhaps could remove this entirely and just create a link snippet instead?
 
   initialize: ->
     @editing = false
@@ -53,6 +60,10 @@
       bookmarkSelect = @element.find('#link_existing_bookmark')
       bookmarkSelect.val(a.attr('href').replace(/[^#]*#/, ''))
       bookmarkSelect.closest('.control-group').find('input[type=radio]').prop('checked', true)
+    else if a.attr('href') && a.attr('href').indexOf('/') == 0
+      pageSelect = @element.find('#link_existing_page')
+      pageSelect.val(a.attr('href').replace(/[^#]*#/, ''))
+      pageSelect.closest('.control-group').find('input[type=radio]').prop('checked', true)
     else
       @element.find('#link_external_url').val(a.attr('href'))
 
@@ -126,6 +137,7 @@
     type = @element.find('input[name=link_type]:checked').val()
 
     switch type
+      when 'existing_page' then attrs = {href: "/#{@element.find('#link_existing_page').val()}"}
       when 'existing_bookmark' then attrs = {href: "##{@element.find('#link_existing_bookmark').val()}"}
       when 'new_bookmark' then attrs = {name: "#{@element.find('#link_new_bookmark').val()}"}
       else attrs = {href: @element.find("#link_#{type}").val()}

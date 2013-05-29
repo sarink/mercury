@@ -1,9 +1,10 @@
 describe "Mercury.modalHandlers.insertTable", ->
 
+  template 'mercury/modals/inserttable.html'
+
   beforeEach ->
-    fixture.load('mercury/modals/inserttable.html')
     @modal =
-      element: $(fixture.el)
+      element: $('#test')
       hide: ->
     @insertTable = $.extend(@modal, Mercury.modalHandlers.insertTable)
 
@@ -113,9 +114,7 @@ describe "Mercury.modalHandlers.insertTable", ->
       expect($('table').attr('border')).toEqual('19')
 
     it "handles non-numeric values", ->
-      $('#table_border').attr(value: '2x')
-      # chrome already does this -- so only test in those browsers that will return 12x
-      $('#table_border').attr(value: '2') unless $('#table_border').val() == '2x'
+      $('#table_border').val('2x')
       jasmine.simulate.keyup($('#table_border').get(0))
       expect($('table').attr('border')).toEqual('2')
 
@@ -136,9 +135,7 @@ describe "Mercury.modalHandlers.insertTable", ->
       expect($('table').attr('cellspacing')).toEqual('5')
 
     it "handles non-numeric values", ->
-      $('#table_spacing').attr(value: '12x')
-      # chrome already does this -- so only test in those browsers that will return 12x
-      $('#table_spacing').attr(value: '12') unless $('#table_spacing').val() == '12x'
+      $('#table_spacing').val('12x')
       jasmine.simulate.keyup($('#table_spacing').get(0))
       expect($('table').attr('cellspacing')).toEqual('12')
 

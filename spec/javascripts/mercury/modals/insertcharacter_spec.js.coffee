@@ -1,9 +1,10 @@
 describe "Mercury.modalHandlers.insertCharacter", ->
 
+  template 'mercury/modals/insertcharacter.html'
+
   beforeEach ->
-    fixture.load('mercury/modals/insertcharacter.html')
     @modal =
-      element: $(fixture.el)
+      element: $('#test')
       hide: ->
     @modalHideSpy = spyOn(@modal, 'hide').andCallFake(=>)
     Mercury.modalHandlers.insertCharacter.call(@modal)

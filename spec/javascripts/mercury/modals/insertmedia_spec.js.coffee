@@ -1,11 +1,12 @@
 describe "Mercury.modalHandlers.insertMedia", ->
 
+  template 'mercury/modals/insertmedia.html'
+
   beforeEach ->
-    fixture.load('mercury/modals/insertmedia.html')
     Mercury.region = null
     spyOn(window, 'setTimeout').andCallFake((callback, timeout) => callback())
     @modal =
-      element: $(fixture.el)
+      element: $('#test')
       hide: ->
       resize: ->
     @insertMedia = $.extend(@modal, Mercury.modalHandlers.insertMedia)

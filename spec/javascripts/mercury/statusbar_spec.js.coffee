@@ -1,7 +1,8 @@
 describe "Mercury.Statusbar", ->
 
+  template 'mercury/statusbar.html'
+
   beforeEach ->
-    fixture.load('mercury/statusbar.html')
     $.fx.off = true
     @region = {
       path: -> [{tagName: 'A'}, {tagName: 'B'}, {tagName: 'C'}]
@@ -16,7 +17,7 @@ describe "Mercury.Statusbar", ->
     beforeEach ->
       @buildSpy = spyOn(Mercury.Statusbar.prototype, 'build')
       @bindEventsSpy = spyOn(Mercury.Statusbar.prototype, 'bindEvents')
-      @statusbar = new Mercury.Statusbar({appendTo: fixture.el, foo: 'bar', visible: false})
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', foo: 'bar', visible: false})
 
     it "accepts options", ->
       expect(@statusbar.options.foo).toEqual('bar')
@@ -54,7 +55,7 @@ describe "Mercury.Statusbar", ->
   describe "observed events ", ->
 
     beforeEach ->
-      @statusbar = new Mercury.Statusbar({appendTo: fixture.el})
+      @statusbar = new Mercury.Statusbar({appendTo: '#test'})
 
     describe "custom event: region:update", ->
 
@@ -75,7 +76,7 @@ describe "Mercury.Statusbar", ->
 
     beforeEach ->
       spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
-      @statusbar = new Mercury.Statusbar({appendTo: fixture.el, visible: true})
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: true})
 
     it "knows it's own height", ->
       expect(@statusbar.height()).toEqual(20) # styled with css in the template
@@ -87,7 +88,7 @@ describe "Mercury.Statusbar", ->
 
       beforeEach ->
         spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
-        @statusbar = new Mercury.Statusbar({appendTo: fixture.el, visible: true})
+        @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: true})
 
       it "returns the offset top of the element", ->
         expect(@statusbar.top()).toEqual($('.mercury-statusbar').offset().top)
@@ -96,7 +97,7 @@ describe "Mercury.Statusbar", ->
 
       beforeEach ->
         spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
-        @statusbar = new Mercury.Statusbar({appendTo: fixture.el, visible: false})
+        @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: false})
 
       it "returns the offset top of the element + it's outer height", ->
         expect(@statusbar.top()).toEqual($('.mercury-statusbar').offset().top + $('.mercury-statusbar').outerHeight())
@@ -105,7 +106,7 @@ describe "Mercury.Statusbar", ->
   describe "#setPath", ->
 
     beforeEach ->
-      @statusbar = new Mercury.Statusbar({appendTo: fixture.el})
+      @statusbar = new Mercury.Statusbar({appendTo: '#test'})
 
     it "builds a path and displays it", ->
       @statusbar.setPath(@region.path())
@@ -115,7 +116,7 @@ describe "Mercury.Statusbar", ->
   describe "#show", ->
 
     beforeEach ->
-      @statusbar = new Mercury.Statusbar({appendTo: fixture.el, visible: false})
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: false})
 
     it "sets visible to true", ->
       @statusbar.visible = false
@@ -136,7 +137,7 @@ describe "Mercury.Statusbar", ->
   describe "#hide", ->
 
     beforeEach ->
-      @statusbar = new Mercury.Statusbar({appendTo: fixture.el, visible: true})
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: true})
 
     it "sets visible to false", ->
       @statusbar.visible = true
