@@ -121,3 +121,14 @@ Now, since we've provided a data-snippet_name attribute for this img tag, mercur
 
 To understand how this options form works, and ultimately how this will be rendered on the page (mercury will load app/views/mercury/snippets/image/preview.html.erb), read jejacks0n's wiki. The implementation of this part of snippets has not changed.
 
+
+rails admin
+----------------
+Since most apps will require some at least semi-advanced database relations/stuff that is better served with a traditional CMS (CRUD for your models), there is an "Advanced" button on the toolbar which launches rails-admin in a full size lightbox iframe.
+
+To learn more about customizing this, read the rails-admin documentation.
+
+
+devise
+----------
+Since rails-admin ships with devise, and every CMS will need some sort of authentication system, I figured may as well just bundle mercury with devise....but modified. I didn't like how devise makes you login with email, so you can now login with a username or email address. Additionally, an "admin" flag was added, both mercury and rails admin will only allow a user to login if this is true.
