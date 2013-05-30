@@ -44,7 +44,8 @@ Here's a simple example:
 ````
 <h1 id="title"><%= simple_region("pageTitle", {"class" => "foo bar"}) %></h1>
 ````
-This will look for a region on the current page which has a region_name of "pageTitle" and has a region_type of "simple". It will render its value inside of the <h1> tag, but also wrap itself in a block-level element (a div) which has the classes "foo" and "bar".
+
+This will look for a region on the current page which has a region_name of "pageTitle" and has a region_type of "simple". It will render its value inside of the ````<h1>```` tag, but also wrap itself in a block-level element (a div) which has the classes "foo" and "bar".
 Let's say the user typed "Mercury is awesome!" and hit the save button, you'd get....
 ````
 <h1 id="title"><div class="foo bar">Mercury is awesome!</div></h1>
@@ -52,9 +53,43 @@ Let's say the user typed "Mercury is awesome!" and hit the save button, you'd ge
 
 snippets
 ------------
-Here's a quick example of how you might implement a sortable/draggable image gallery
+I encourage you to first understand how snippets work in the original mercury by reading jejacks0n's wiki.
+
+I took the idea of snippets from the original mercury and basically use them to create everything you'd ever need. Snippets are powerful, and are now very easy to create. In fact, I've done away with image_regions completely, and simply implemented them as an image_snippet. You shouldn't ever have to create your own region types anymore, in theory, you should be able to create a snippet for anything you need. 
+Snippets are customizable through the options popup view and draggable within a snippet region.
+Snippet regions can be customized as well. By default there is the ability to specify which types of snippets are allowed to be dragged into a region, and also how many. Inside of mercury_helper.rb you can see how this is achieved through the use of the data-accepted_snippets and data-number_of_snippets variables.
+
+The accepted_snippets list is a comma delimited string of which snippet names are allowed to be dropped into the region. 
+
+The number_of_snippets variable is the maximum number of snippets that can be dropped into the region.
+
+Now that you understand how to create a snippet region, let's talk about how to create the actual snippets that your user can drop into your snippet regions...
+
+Mercury identifies a snippet as anything with a data-snippet_name attribute. In addition to this, there a few other options you can specify: data-snippet_show_options and data-snippet_default_options.
+
+data-snippet_show_options: This should either be "true" or "false" - by default, when you drag a snippet into a snippet region, mercury pops up the snippet options view (app/views/mercury/snippets/<snippet_name>/options.html.erb). If you set data-snippet_show_options to false, it will not do this. Instead, it will use the data-snippet_default_options attribute to create the snippet. The user can still modify the options by hovering over the snippet and clicking the options button on the snippet toolbar that appears. This only prevents the initial options popup.
+** THIS DOES NOT WORK YET ** see app/javascripts/mercury/snippet.js.coffee:7 - this is where it has yet to be implemented
+
+data-snippet_default_options: This is an optional JSON object which can represent the default options for a snippet. If you specify this, this object will be POST'ed to the server when loading the options view (app/views/mercury/snippets/<snippet_name>/options.html.erb) to pre-populate the form. Furthermore, if you wish to use data-snippet_show_options="false" for a snippet - then you require this.
+
+To understand how all of this comes together, you should look at how images work.
+
+images
+------------
+As previously stated, images have been implemented as snippets. If you'd like to create your own snippets, understanding how images are implemented is probably a good start.
+
+Here's a quick example of how you might implement a sortable/draggable image gallery of 8 images
+app/views/pages/_home.html.erb
 ````
 <div class="photo-gallery">
-    <%= 
-    <%= image_snippet_region("photoGallery", {"class" => "thumbs span-8"}) %>
+    <%= eight_images_snippet_region("photoGallery", {"class" => "thumbs span-8"}) %>
 </div>
+````
+app/helpers/mercury_helper.rb
+````
+def eight_images_snippet_region(region_name, attrs={})
+    render_snippet_region(region_name, "image", 8, attrs)
+end
+````
+app/views/mercury/panels/images.html.erb
+````
