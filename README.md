@@ -82,6 +82,7 @@ Let's take a look at how an image_snippet_region works and how an image snippet 
 
 
 This code creates an image_snippet_region on your page called singlePhoto
+
 app/views/pages/_your-page.html.erb:
 ````
 <div class="single-photo">
@@ -90,6 +91,7 @@ app/views/pages/_your-page.html.erb:
 ````
 
 Here's the default image_snippet_region implementation already included
+
 app/helpers/mercury_helper.rb:
 ````
 def image_snippet_region(region_name, attrs={})
@@ -98,6 +100,7 @@ end
 ````
 
 Here's how we create the snippet on the client side to be dropped into the image_snippet_region that will be rendered from the code above. This is recognized as a snippet because we specified the data-snippet_name attribute. We've chosen to provide default options by putting a JSON object in the data-snippet_default_options attribute containing the same parameters as our app/views/mercury/snippets/image/options.html.erb form does. Note that the "file" variable is valid here because we're dynamically rendering this html inside of a JS template . Most of the time this will probably just be hard coded HTML as you create individual snippets.
+
 app/views/mercury/panels/images.html.erb
 ````
     <img draggable="true"
