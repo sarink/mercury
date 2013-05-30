@@ -70,26 +70,51 @@ Mercury identifies a snippet as anything with a data-snippet_name attribute. In 
 data-snippet_show_options: This should either be "true" or "false" - by default, when you drag a snippet into a snippet region, mercury pops up the snippet options view (app/views/mercury/snippets/your-snippet-name/options.html.erb). If you set data-snippet_show_options to false, it will not do this. Instead, it will use the data-snippet_default_options attribute to create the snippet. The user can still modify the options by hovering over the snippet and clicking the options button on the snippet toolbar that appears. This only prevents the initial options popup.
 ** THIS DOES NOT WORK YET ** see app/javascripts/mercury/snippet.js.coffee:7 - this is where it has yet to be implemented
 
-data-snippet_default_options: This is an optional JSON object which can represent the default options for a snippet. If you specify this, this object will be POST'ed to the server when loading the options view (app/views/mercury/snippets/your-snippet-name/options.html.erb) to pre-populate the form. Furthermore, if you wish to use data-snippet_show_options="false" for a snippet - then you require this.
+data-snippet_default_options: This is an optional JSON object which can represent the default options for a snippet. If you specify this, this object will be POST'ed to the server when loading the options view (app/views/mercury/snippets/your-snippet-name/options.html.erb) to pre-populate the form. Furthermore, if you wish to use data-snippet_show_options="false" for a snippet, then you require this.
 
 To understand how all of this comes together, you should look at how images work.
 
 images
 ------------
-As previously stated, images have been implemented as snippets. If you'd like to create your own snippets, understanding how images are implemented is probably a good start.
+As previously stated, images have been implemented as snippets. If you'd like to create your own snippets, understanding how images are implemented is probably the best place to start.
 
-Here's a quick example of how you might implement a sortable/draggable image gallery of 8 images
-app/views/pages/_home.html.erb
+Let's take a look at how an image_snippet_region works and how an image snippet that can be dropped into this region is made
+
+
+This code creates an image_snippet_region on your page called singlePhoto
+app/views/pages/_your-page.html.erb:
 ````
-<div class="photo-gallery">
-    <%= eight_images_snippet_region("photoGallery", {"class" => "thumbs span-8"}) %>
+<div class="single-photo">
+    <%= image_snippet_region("singlePhoto", {"class" => "span-4"}) %>
 </div>
 ````
-app/helpers/mercury_helper.rb
+
+Here's the default image_snippet_region implementation already included
+app/helpers/mercury_helper.rb:
 ````
-def eight_images_snippet_region(region_name, attrs={})
-    render_snippet_region(region_name, "image", 8, attrs)
+def image_snippet_region(region_name, attrs={})
+    render_snippet_region(region_name, "image", 1, attrs)
 end
 ````
+
+Here's how we create the snippet on the client side to be dropped into the image_snippet_region that will be rendered from the code above. This is recognized as a snippet because we specified the data-snippet_name attribute. We've chosen to provide default options by putting a JSON object in the data-snippet_default_options attribute containing the same parameters as our app/views/mercury/snippets/image/options.html.erb form does. Note that the "file" variable is valid here because we're dynamically rendering this html inside of a JS template . Most of the time this will probably just be hard coded HTML as you create individual snippets.
 app/views/mercury/panels/images.html.erb
 ````
+    <img draggable="true"
+         src="{%=file.thumbnail_url%}"
+         data-snippet_name="image"
+         data-snippet_show_options="true" 
+         data-snippet_default_options="{%= JSON.stringify({
+            src: file.url,
+            title: file.name,
+            width: '',
+            height: '',
+         }) %}"
+     />
+````
+
+To recap...
+Now, since we've provided a data-snippet_name attribute for this img tag, mercury will see this as a snippet, and allow it to be dragged. If it is dragged over a snippet region which lists "image" inside of its data-accepted_snippets list, a + icon will appear and you can drop the snippet there to insert it. When the user lets go, since we have specified data-snippet_show_options is true, mercury will try and load app/views/mercury/snippets/image/options.html.erb in a modal box, and since we've specified data-snippet_default_options with a valid JSON object, any properties on that options form will automatically be pre-populated with this data.
+
+To understand how this options form works, and ultimately how this will be rendered on the page (mercury will load app/views/mercury/snippets/image/preview.html.erb), read jejacks0n's wiki. The implementation of this part of snippets has not changed.
+
