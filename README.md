@@ -67,10 +67,10 @@ Now that you understand how to create a snippet region, let's talk about how to 
 
 Mercury identifies a snippet as anything with a data-snippet_name attribute. In addition to this, there a few other options you can specify: data-snippet_show_options and data-snippet_default_options.
 
-data-snippet_show_options: This should either be "true" or "false" - by default, when you drag a snippet into a snippet region, mercury pops up the snippet options view (app/views/mercury/snippets/<snippet_name>/options.html.erb). If you set data-snippet_show_options to false, it will not do this. Instead, it will use the data-snippet_default_options attribute to create the snippet. The user can still modify the options by hovering over the snippet and clicking the options button on the snippet toolbar that appears. This only prevents the initial options popup.
+data-snippet_show_options: This should either be "true" or "false" - by default, when you drag a snippet into a snippet region, mercury pops up the snippet options view (app/views/mercury/snippets/your-snippet-name/options.html.erb). If you set data-snippet_show_options to false, it will not do this. Instead, it will use the data-snippet_default_options attribute to create the snippet. The user can still modify the options by hovering over the snippet and clicking the options button on the snippet toolbar that appears. This only prevents the initial options popup.
 ** THIS DOES NOT WORK YET ** see app/javascripts/mercury/snippet.js.coffee:7 - this is where it has yet to be implemented
 
-data-snippet_default_options: This is an optional JSON object which can represent the default options for a snippet. If you specify this, this object will be POST'ed to the server when loading the options view (app/views/mercury/snippets/<snippet_name>/options.html.erb) to pre-populate the form. Furthermore, if you wish to use data-snippet_show_options="false" for a snippet - then you require this.
+data-snippet_default_options: This is an optional JSON object which can represent the default options for a snippet. If you specify this, this object will be POST'ed to the server when loading the options view (app/views/mercury/snippets/your-snippet-name/options.html.erb) to pre-populate the form. Furthermore, if you wish to use data-snippet_show_options="false" for a snippet - then you require this.
 
 To understand how all of this comes together, you should look at how images work.
 
