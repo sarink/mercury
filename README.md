@@ -2,6 +2,17 @@ mercury
 =======
 Mercury Editor: The Rails HTML5 WYSIWYG editor
 
+I've taken what jejacks0n made and expanded upon it. This is an all-inclusive CMS built with the mercury editor. I realize that this may not be for everyone, but for me this satisfies most of the tasks that I need to do on any project.
+The biggest/most notable changes are:
+
+- Implemented back end for ALL types of mercury regions, including storage and retrieval/display
+- Enhanced snippet functionality so they are straight forward and easy to create
+- Basic page system
+- Rails admin integration for those more advanced tasks
+- Built in authentication through devise
+- Drag n drop image asset gallery + uploader
+
+
 install
 --------
 1. Add to Gemfile
