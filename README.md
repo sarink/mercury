@@ -10,7 +10,7 @@ The biggest/most notable changes are:
 - Basic page system
 - Rails admin integration for those more advanced tasks
 - Built in authentication through devise
-- Built in Drag-n-drop image asset "gallery" + uploader
+- Built in Drag-n-drop images/assets "gallery" + uploader
 - Automatically adds an "edit page" link at the bottom of your application.html
 
 
