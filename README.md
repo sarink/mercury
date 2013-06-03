@@ -29,6 +29,8 @@ gem 'mercury-rails', :git => 'git://github.com/sarink/mercury.git'
     
 4. Restart your server
 
+5. Create a Page, add some Regions to it, and away you go!
+
 
 pages
 --------
