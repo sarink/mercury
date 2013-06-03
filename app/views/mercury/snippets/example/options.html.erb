@@ -6,7 +6,7 @@
       <div class="control-group string optional">
         <label class="string optional control-label" for="options_first_name">First Name</label>
         <div class="controls">
-          <input class="span6 string optional" id="options_first_name" name="options[first_name]" size="50" type="text" value="<%= @options[:first_name] %>">
+          <input class="span6 string optional" name="options[first_name]" size="50" type="text" value="<%= @options["first_name"] %>">
         </div>
       </div>
     </fieldset>
@@ -16,7 +16,7 @@
       <div class="control-group string optional">
         <label class="string optional control-label" for="options_favorite_beer">Favorite Beer</label>
         <div class="controls">
-          <input class="span6 string optional" id="options_favorite_beer" name="options[favorite_beer]" size="50" type="text" value="<%= @options[:favorite_beer] %>">
+          <input class="span6 string optional" name="options[favorite_beer]" size="50" type="text" value="<%= @options["favorite_beer"] %>">
         </div>
       </div>
     </fieldset>
