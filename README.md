@@ -11,7 +11,7 @@ gem 'mercury-rails', :git => 'git://github.com/sarink/mercury.git'
 ````
 
 2. Install rails-admin
-````rails g rails_admin:install```` MUST install with the defaults (mount at /admin, user model named user)
+````rails g rails_admin:install```` MUST install with the defaults (mount at /admin, user model named user), hit yes when asked to override files
     
 3. Install mercury ````rails g mercury:install```` (this will run rake db:migrate and rake db:seed for you at the end)
     
