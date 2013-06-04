@@ -36,7 +36,7 @@ pages
 --------
 For the time being, Pages must be created manually. You can create them by manually editing the db, through the rails console, or adding a line like this to your db/seeds.db ````Mercury::Page.create(name: "home", title: "Home", description: "Home Page")````
 
-The above line will look inside of "app/views/pages/" for a "_home.html.erb" file. The name of a page must match its filename (minus the _), and all page views are created as partials beginning with an underscore.
+The above line will look inside of ``app/views/pages/`` for a ``_home.html.erb`` file. The name of a page must match its filename (minus the _), and all page views are created as partials beginning with an underscore.
 
 
 regions
