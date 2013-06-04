@@ -9,7 +9,7 @@ The biggest/most notable changes are:
 - Enhanced snippet functionality so they are straight forward and easy to create
 - Basic page system
 - Rails admin integration for those more advanced tasks
-- Built in authentication through devise
+- Built in authentication through devise (w/custom User model)
 - Built in Drag-n-drop images/assets "gallery" + uploader
 - Automatically adds an "edit page" link at the bottom of your application.html
 
