@@ -29,7 +29,7 @@ gem 'mercury-rails', :git => 'git://github.com/sarink/mercury.git'
     
 4. Restart your server
 
-5. Create a Page, add some Regions to it, and away you go!
+5. Create a Page, add some Regions to it, and away you go! (your default login is admin/admin123)
 
 
 pages
