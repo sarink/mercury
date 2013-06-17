@@ -30,7 +30,7 @@ module MercuryHelper
       end
     end
     
-    # since name and type have their own specific columns on the region model, we don't store them in the attrs column in the db
+    # since region_name and region_type have their own specific columns on the region model, we don't store them in the attrs column in the db
     # (these have also been excluded from Mercury.config.saveAttributes[] in mercury.js so they do not get saved)
     # we do however still actually want them in the attrs[] so they get rendered and appear as html attributes in the DOM when the page is rendered
     # note that the reason we break convention and prefix these with region_ is because "name" is a normal html attribute, and "type" is a reserved mysql word
