@@ -14,14 +14,14 @@
     <!-- </div> -->
     <!-- The loading indicator is shown during image processing -->
     <div class="fileupload-loading"></div>
-    <br>
+    <br/>
     <!-- The table listing the files available for upload/download -->
     <div class="files">
-        
+
     </div>
   <% end %>
   <hr/>
-  
+
 <script>
   var fileUploadErrors = {
       maxFileSize: 'File is too big',
@@ -32,59 +32,6 @@
       emptyResult: 'Empty file upload result'
   };
 </script>
-
-<!-- The template to display files available for download -->
-<script id="template-download" type="text/x-tmpl">
-    {% for (var i=0, file; file=o.files[i]; i++) { %}
-        <div class="template-download fade" data-filter="{%= file.name %}">
-            <hr style="clear: both; margin: 10px 0;" />
-            {% if (file.error) { %}
-            <div class="name">{%= file.name %}</div>
-            <div class="error">
-                <span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}
-            </div>
-            {% } else { %}
-            <div class="preview">
-                <!-- <a href="{%=file.url%}" title="{%=file.name%}" rel="lightbox" data-id="{%=file.id%}"> -->
-                <img draggable="true"
-                     src="{%=file.thumbnail_url%}"
-                     data-snippet_name="image"
-                     data-snippet_show_options="true" 
-                     data-snippet_default_options="{%= JSON.stringify({
-                        src: file.url,
-                        title: file.name,
-                        width: '',
-                        height: '',
-                     }) %}"
-                 />
-            </div>
-            <div class="info">
-                <span class="name">
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-id="{%=file.id%}">{%=file.name%}</a>
-                </span>
-                <span class="size">
-                    {%= o.formatFileSize(file.size) %}
-                </span>
-                <span class="actions">
-                    <div class="edit">
-                        <button class="btn btn-mini btn-primary" style="opacity: 0.3;">
-                            <i class="icon-edit icon-white"></i>
-                        </button>
-                    </div>
-                    <div class="delete">
-                        <button class="btn btn-mini btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
-                            <i class="icon-remove icon-white"></i>
-                            <!-- {%= locale.fileupload.destroy %} -->
-                        </button>
-                    </div>
-                </span>
-            </div>
-            {% } %}
-        </div>
-    {% } %}
-</script>
-
-
 
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
@@ -103,7 +50,7 @@
                 </button>
                 {% } %}
             </span>
-            
+
             {% } else if (o.files.valid && !i) { %}
             <div class="preview">
                 <span class="fade"></span>
@@ -134,6 +81,57 @@
                             <!-- {%=locale.fileupload.cancel%} -->
                         </button>
                         {% } %}
+                    </div>
+                </span>
+            </div>
+            {% } %}
+        </div>
+    {% } %}
+</script>
+
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <div class="template-download fade" data-filter="{%= file.name %}">
+            <hr style="clear: both; margin: 10px 0;" />
+            {% if (file.error) { %}
+            <div class="name">{%= file.name %}</div>
+            <div class="error">
+                <span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}
+            </div>
+            {% } else { %}
+            <div class="preview">
+                <!-- <a href="{%=file.url%}" title="{%=file.name%}" rel="lightbox" data-id="{%=file.id%}"> -->
+                <img draggable="true"
+                     src="{%=file.thumbnail_url%}"
+                     data-snippet_name="image"
+                     data-snippet_show_options="true"
+                     data-snippet_default_options="{%= JSON.stringify({
+                        src: file.url,
+                        title: file.name,
+                        width: '',
+                        height: '',
+                     }) %}"
+                 />
+            </div>
+            <div class="info">
+                <span class="name">
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-id="{%=file.id%}">{%=file.name%}</a>
+                </span>
+                <span class="size">
+                    {%= o.formatFileSize(file.size) %}
+                </span>
+                <span class="actions">
+                    <div class="edit">
+                        <button class="btn btn-mini btn-primary" style="opacity: 0.3;">
+                            <i class="icon-edit icon-white"></i>
+                        </button>
+                    </div>
+                    <div class="delete">
+                        <button class="btn btn-mini btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
+                            <i class="icon-remove icon-white"></i>
+                            <!-- {%= locale.fileupload.destroy %} -->
+                        </button>
                     </div>
                 </span>
             </div>
@@ -209,10 +207,10 @@
   </tr>
   {% } %}
 </script>
-    
-    
-    
-    
+
+
+
+
 <form id="mercury_media" class="form-horizontal" style="width:615px">
 
   <div class="form-inputs mercury-display-pane-container">
@@ -228,7 +226,7 @@
         </div>
       </div>
     </fieldset>
-    
+
     <fieldset>
       <legend>Videos</legend>
       <div class="control-group url optional">

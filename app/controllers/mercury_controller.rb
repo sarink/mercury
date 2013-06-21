@@ -22,7 +22,7 @@ class MercuryController < ActionController::Base
   def snippet_preview
     render :action => "/snippets/#{params[:name]}/preview" if authenticate
   end
-  
+
   def authenticate
     if current_user.admin?
       return true
@@ -35,9 +35,9 @@ class MercuryController < ActionController::Base
   # def test_page
     # render :text => params
   # end
-# 
+#
   # private
-# 
+#
   # def authenticate
     # redirect_to "/#{params[:requested_uri]}" unless can_edit?
   # end

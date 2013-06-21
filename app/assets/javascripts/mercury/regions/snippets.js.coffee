@@ -81,8 +81,8 @@ class @Mercury.Regions.Snippets extends Mercury.Region
       @element.sortable('destroy')
       @element.removeClass('focus')
     super
-    
-    
+
+
   acceptSnippet: (snippet) ->
     if (snippet)
       return @element.data('accepted_snippets') == '*' ||
