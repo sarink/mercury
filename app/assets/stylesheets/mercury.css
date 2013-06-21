@@ -1,6 +1,7 @@
 /*
  *= require_self
  *= require mercury/bootstrap/bootstrap
+ *= require mercury/bootstrap/bootstrap-ish
  *= require mercury/bootstrap-overrides
  *= require mercury/dialog
  *= require mercury/lightview

@@ -87,7 +87,8 @@ class @Mercury.Regions.Snippets extends Mercury.Region
     if (snippet)
       return @element.data('accepted_snippets') == '*' ||
              @element.data('accepted_snippets').indexOf(snippet.name) != -1 &&
-             @element.find('[data-snippet]').length < @element.data('number_of_snippets')
+             @element.find('[data-snippet]').length < @element.data('number_of_snippets') &&
+             @element.data('')
      else
       return false
 
