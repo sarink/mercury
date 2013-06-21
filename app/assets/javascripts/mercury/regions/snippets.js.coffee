@@ -87,8 +87,9 @@ class @Mercury.Regions.Snippets extends Mercury.Region
     if (snippet)
       return @element.data('accepted_snippets') == '*' ||
              @element.data('accepted_snippets').indexOf(snippet.name) != -1 &&
-             @element.find('[data-snippet]').length < @element.data('number_of_snippets') &&
-             @element.data('')
+             @element.find('[data-snippet]').length < @element.data('number_of_snippets') #&&
+             # TODO: find a way to tell if the snippet is already on the page or not
+             #@element.data('[data-snippet_on_page') != 'true'
      else
       return false
 
