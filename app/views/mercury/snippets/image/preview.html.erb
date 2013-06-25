@@ -1,10 +1,10 @@
 <%
-    @src = params[:options]["src"].to_s
-    @title = params[:options]["title"].to_s
-    @width = params[:options]["width"].to_s
-    @height = params[:options]["height"].to_s
-    @width = @width + "px" unless @width == "auto" || @width.ends_with?("px") # just in case someone tries to type "auto" in one of the dimension fields
-    @height = @height + "px" unless @height == "auto" || @height.ends_with?("px")
+    @src = params[:options]["src"].to_s.strip
+    @title = params[:options]["title"].to_s.strip
+    @width = params[:options]["width"].to_s.strip
+    @height = params[:options]["height"].to_s.strip
+    @width = @width + "px" unless (@width == "auto" || @width.ends_with?("px")) # just in case someone tries to type "auto" in one of the dimension fields
+    @height = @height + "px" unless (@height == "auto" || @height.ends_with?("px"))
 %>
 
 <img

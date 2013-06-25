@@ -3,16 +3,16 @@
 class PagesController < ApplicationController
   Page = Mercury::Page
   History = Mercury::History
-  
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   def record_not_found
-    render text: "404 Not Found", status: 404
+    render :text =>"404 Not Found", :status => 404
   end
-  
+
   # GET /pages
   # GET /pages.json
   def index
-    @page = Page.where(name: "home").first
+    @page = Page.where(:name => "home").first
 
     respond_to do |format|
       format.html { render :action => "show" }
@@ -30,12 +30,12 @@ class PagesController < ApplicationController
       format.json { render :json => @page }
     end
   end
-  
+
   # GET /pages/home
   # GET /pages/home.json
   def showbyname
     @page = Page.where(:name => params[:name]).first
-    
+
     if @page.nil?
       return record_not_found
     else
@@ -45,7 +45,7 @@ class PagesController < ApplicationController
       end
     end
   end
-  
+
   # GET /pages/new
   # GET /pages/new.json
   def new
@@ -82,15 +82,15 @@ class PagesController < ApplicationController
   # PUT /pages/1.json
   def update
     @page = Page.find(params[:id])
-    
+
     @history = History.new
     @history.user = current_user
     @history.page = @page
     @history.save
-    
+
     @page.regions.each do |region|
       region.update_attributes(params["content"][region.region_name])
-      
+
       # TODO: find a way to get around this
       # because of this bug, region.changed? is always going to return true:
       # https://github.com/rails/rails/issues/8328
@@ -99,7 +99,7 @@ class PagesController < ApplicationController
       # maybe we could not serialize them, but store as normal text, and just use JSON.parse?
         # i think this would break the render_region for snippets (line ~44 of mercury_helper.rb), though.
       # hmm....
-      
+
       # region.assign_attributes(params["content"][region.region_name])
       # if region.changed?
         # @history = History.new
@@ -130,5 +130,5 @@ class PagesController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
 end

@@ -77,7 +77,6 @@ class @Mercury.Snippet
       contenteditable: "false"
       'draggable': "true"
       'data-snippet': @identity
-      'data-snippet_name': @name
       'data-snippet_options': JSON.stringify(@options)
       'data-snippet_version': @version
     }, context)

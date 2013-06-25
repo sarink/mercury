@@ -55,6 +55,7 @@ legend + .control-group {
 }
 label input[type=radio] {
   margin-right: 5px;
+  margin-bottom: 5px;
 }
 .form-actions {
   padding-bottom: 0;

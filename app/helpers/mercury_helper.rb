@@ -79,7 +79,7 @@ module MercuryHelper
 
   # full region is where you can do anything
   def full_region(region_name, attrs={})
-    attrs["data-accepted_snippets"] = "image"
+    attrs["data-accepted_snippets"] = "*"
     attrs["data-number_of_snippets"] = 99
     render_region(region_name, "full", attrs)
   end

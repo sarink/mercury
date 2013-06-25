@@ -85,7 +85,6 @@ class @Mercury.Regions.Full extends Mercury.Region
       if @acceptSnippet(snippet)
         @focus()
         Mercury.Snippet.displayOptionsFor(snippet.name, {}, snippet.showOptions)
-        @document.execCommand('undo', false, null)
       # if Mercury.snippet
         # @focus()
         # Mercury.Snippet.displayOptionsFor(Mercury.snippet.name, {options: { image_source: "HI"}}, Mercury.snippet.hasOptions && Mercury.snippet.showOptionsOnDrag)
@@ -104,7 +103,7 @@ class @Mercury.Regions.Full extends Mercury.Region
     # isn't handled (eg, putting the image where it was dropped,) so to allow the browser to do it's thing, and also do
     # our thing we have this little hack.  *sigh*
     # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
-    
+
     # @element.on 'possible:drop', =>
       # return if @previewing
       # if Mercury.snippet
@@ -288,7 +287,7 @@ class @Mercury.Regions.Full extends Mercury.Region
       @element.get(0).contentEditable = true
       @element.css({overflow: 'auto'})
     else
-      @content(@content())
+      @content(@content(null, false, false))
       @element.get(0).contentEditable = false
       @element.css({overflow: @element.data('originalOverflow')})
       @element.blur()
@@ -474,7 +473,6 @@ class @Mercury.Regions.Full extends Mercury.Region
 
     insertSnippet: (selection, options) ->
       snippet = options.value
-      console.log("HERE!",snippet)
       if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
         selection.selectNode(existing.get(0))
       selection.insertNode(snippet.getHTML(@document))
