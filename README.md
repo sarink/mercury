@@ -18,7 +18,9 @@ install
 --------
 1. Add to Gemfile
 ````
-gem 'rails_admin'
+gem 'rails', '~> 4.0.0'
+gem 'sass-rails', '~> 4.0'
+gem 'rails_admin', '~> 0.5.0'
 gem 'mercury-rails', :git => 'git://github.com/sarink/mercury.git'
 ````
 
