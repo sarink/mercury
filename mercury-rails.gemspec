@@ -8,17 +8,21 @@ Gem::Specification.new do |s|
   s.name        = 'mercury-rails'
   s.date        = '2012-10-19'
   s.version     = Mercury::VERSION
-  s.authors     = ['Jeremy Jackson']
-  s.email       = ['jejacks0n@gmail.com']
-  s.homepage    = 'http://github.com/jejacks0n/mercury'
+  s.authors     = ['Kabir Sarin']
+  s.email       = ['sarink87@gmail.com']
+  s.homepage    = 'http://github.com/sarink/mercury'
   s.summary     = %Q{Mercury Editor: The Rails HTML5 WYSIWYG editor}
   s.description = %Q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of the Rails asset pipeline}
   s.licenses    = ['MIT']
 
   # Runtime Dependencies
-  s.add_dependency 'railties', '>= 3.2'
+  s.add_dependency 'railties', '~> 3.2'
   s.add_dependency 'coffee-rails', '>= 3.2.2'
   s.add_dependency 'jquery-ui-rails', '>= 2.0.2'
+  s.add_dependency 'coffee-script-source', '>= 1.4.0'
+  s.add_dependency 'paperclip', '~> 3.4'
+  s.add_dependency 'devise', '~> 2.2'
+  # s.add_dependency 'rails_admin', '~> 0.4'
 
   # Gem Files
   s.extra_rdoc_files  = %w(LICENSE POST_INSTALL)
