@@ -13,8 +13,7 @@ module Mercury
 
       def add_gemfile_dependencies
         # append_to_file "Gemfile", %Q{\ngem 'rails_admin'}
-        append_to_file "Gemfile", %Q{\ngem 'paperclip'}
-        append_to_file "Gemfile", %Q{\ngem 'coffee-script-source', '1.4.0'}
+        append_to_file "Gemfile", %Q{\ngem 'paperclip', '~> 3.4'}
 
         # if options[:orm] == 'mongoid'
           # append_to_file "Gemfile", %Q{\ngem 'mongoid-paperclip', :require => 'mongoid_paperclip'}
@@ -91,8 +90,6 @@ module Mercury
             migration_template 'db/migrate/mercury_add_changes_to_devise_users.rb'
         # end
         append_to_file 'db/seeds.rb', %Q{\nUser.create(username: 'admin', admin: 1, email: 'admin@admin.com', password: 'admin123')}
-        rake "db:migrate"
-        rake "db:seed"
       end
 
       def display_readme
