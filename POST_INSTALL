@@ -10,3 +10,4 @@ Here's a post install checklist:
 
 * Your default admin user is "admin", "admin@admin.com", "admin123"
 
+* Run `bundle install`, `rake db:migrate`, `rake db:seed`
