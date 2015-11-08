@@ -16,22 +16,31 @@ The biggest/most notable changes are:
 
 install
 --------
-1. Add to Gemfile
+
+**You must use ruby 1.9.3 and rails 3.2**
+
+Create a new rails 3.2.2 project
+```
+gem install rails -v 3.2.2
+cd /your/project
+rails new .
+```
+
+1. Add to Gemfile and run `bundle install`
 ````
-gem 'rails', '~> 4.0.0'
-gem 'sass-rails', '~> 4.0'
-gem 'rails_admin', '~> 0.5.0'
+gem 'rails_admin', '~> 0.4'
 gem 'mercury-rails', :git => 'git://github.com/sarink/mercury.git'
 ````
 
-2. Install rails-admin
-````rails g rails_admin:install```` MUST install with the defaults (mount at /admin, user model named user)
+2. Install rails-admin ````rails g rails_admin:install```` MUST install with the defaults (mount at /admin, user model named user)
     
-3. Install mercury ````rails g mercury:install```` (this will run rake db:migrate and rake db:seed for you at the end). Make sure to hit yes when asked to overwrite files
-    
-4. Restart your server
+3. Install mercury ````rails g mercury:install````. Make sure to hit yes when asked to overwrite files.
 
-5. Create a Page, add some Regions to it, and away you go! (your default login is admin/admin123)
+4. Run `rake db:migrate` and `rake db:seed`
+    
+5. Restart your server
+
+6. Create a Page, add some Regions to it, and away you go! (your default login is admin/admin123)
 
 
 pages
