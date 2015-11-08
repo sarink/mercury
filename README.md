@@ -36,7 +36,7 @@ gem 'mercury-rails', :git => 'git://github.com/sarink/mercury.git'
     
 3. Install mercury ````rails g mercury:install````. Make sure to hit yes when asked to overwrite files.
 
-4. Run `rake db:migrate` and `rake db:seed`
+4. Run `bundle install`, `rake db:migrate` and `rake db:seed`
     
 5. Restart your server
 
