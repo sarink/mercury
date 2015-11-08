@@ -18,7 +18,7 @@
   width: 128px;
   height: 128px;
   margin: -64px 0 0 -64px;
-  background: url(../img/loading.gif);
+  background: url(../mercury/loading-dark.gif);
   z-index: 9999;
 }
 /* Fix for IE 6 which does not support position:fixed: */
